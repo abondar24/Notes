@@ -19,3 +19,10 @@ doc/api/
 *.js_
 *.js.deps
 *.js.map
+
+notes/android/app/google-services.json
+notes/ios/firebase_app_id_file.json
+notes/ios/Runner/GoogleService-Info.plist
+notes/macos/Runner/GoogleService-Info.plist
+notes/lib/firebase_options.dart
+notes/macos/firebase_app_id_file.json
