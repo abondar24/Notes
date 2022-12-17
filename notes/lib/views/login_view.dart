@@ -1,38 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import '../firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'firebase_options.dart';
-import 'views/login_view.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class LoginView extends StatefulWidget {
+  const LoginView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const LoginView(),
-    );
-  }
+  State<StatefulWidget> createState() => _LoginViewState();
 }
 
-class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
-
-  @override
-  State<RegisterView> createState() => _RegisterViewState();
-}
-
-class _RegisterViewState extends State<RegisterView> {
+class _LoginViewState extends State<LoginView> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
 
@@ -53,7 +31,7 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Register')),
+        appBar: AppBar(title: const Text('Login')),
         body: FutureBuilder(
             future: Firebase.initializeApp(
               options: DefaultFirebaseOptions.currentPlatform,
@@ -81,15 +59,16 @@ class _RegisterViewState extends State<RegisterView> {
                           onPressed: () async {
                             final email = _emailController.text;
                             final password = _passwordController.text;
+
                             try {
                               final userCredential = await FirebaseAuth.instance
-                                  .createUserWithEmailAndPassword(
+                                  .signInWithEmailAndPassword(
                                       email: email, password: password);
                             } on FirebaseAuthException catch (ex) {
                               print(ex.code);
                             }
                           },
-                          child: const Text('Register'))
+                          child: const Text('Login'))
                     ],
                   );
                 default:
