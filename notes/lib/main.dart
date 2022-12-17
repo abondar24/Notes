@@ -2,13 +2,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'views/login_view.dart';
 import 'views/register_view.dart';
+import 'views/verify_email_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(const MyApp());
+  runApp(MaterialApp(
+    title: 'Flutter Demo',
+    theme: ThemeData(
+      primarySwatch: Colors.blue,
+    ),
+    home: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -30,8 +37,9 @@ class MyApp extends StatelessWidget {
                   final emailVerified = user?.emailVerified ?? false;
                   if (emailVerified) {
                     return const LoginView();
+                    //return const Text('don');
                   } else {
-                    return const RegisterView();
+                    return const VerifyEmailView();
                   }
 
                 default:
