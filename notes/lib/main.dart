@@ -15,6 +15,10 @@ void main() {
       primarySwatch: Colors.blue,
     ),
     home: const MyApp(),
+    routes: {
+      '/login/': (context) => const LoginView(),
+      '/register/': (context) => const RegisterView()
+    },
   ));
 }
 
@@ -23,28 +27,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: const Text('Notes')),
-        body: FutureBuilder(
-            future: Firebase.initializeApp(
-              options: DefaultFirebaseOptions.currentPlatform,
-            ),
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.done:
-                  final user = FirebaseAuth.instance.currentUser;
-
-                  final emailVerified = user?.emailVerified ?? false;
-                  if (emailVerified) {
-                    return const LoginView();
-                    //return const Text('don');
-                  } else {
-                    return const VerifyEmailView();
-                  }
-
-                default:
-                  return const Text('Loading');
+    return FutureBuilder(
+        future: Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        ),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.done:
+              final user = FirebaseAuth.instance.currentUser;
+              if (user != null) {
+                if (user.emailVerified) {
+                  print('don');
+                } else {
+                  return const VerifyEmailView();
+                }
+              } else {
+                return const LoginView();
               }
-            }));
+              return const Text('don');
+            default:
+              return const Text('Loading');
+          }
+        });
   }
 }
