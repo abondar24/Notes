@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -56,7 +57,7 @@ class _LoginViewState extends State<LoginView> {
                         .signInWithEmailAndPassword(
                             email: email, password: password);
                   } on FirebaseAuthException catch (ex) {
-                    print(ex.code);
+                    log(ex.code);
                   }
                 },
                 child: const Text('Login')),
