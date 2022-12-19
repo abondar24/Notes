@@ -23,8 +23,10 @@ class _NotesViewState extends State<NotesView> {
                   final shouldLogout = await showLogoutDialog(context);
                   if (shouldLogout) {
                     await FirebaseAuth.instance.signOut();
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/login/', (route) => false);
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/login/',
+                      (route) => false,
+                    );
                   }
                   break;
               }
@@ -32,7 +34,9 @@ class _NotesViewState extends State<NotesView> {
             itemBuilder: (context) {
               return [
                 const PopupMenuItem<MenuAction>(
-                    value: MenuAction.logout, child: Text('logout'))
+                  value: MenuAction.logout,
+                  child: Text('Log out'),
+                )
               ];
             },
           )
@@ -48,7 +52,7 @@ Future<bool> showLogoutDialog(BuildContext context) {
     builder: (context) {
       return AlertDialog(
         title: const Text('Sign out'),
-        content: const Text('Are you sure you want to sign out>'),
+        content: const Text('Are you sure you want to log out?'),
         actions: [
           TextButton(
               onPressed: () {
