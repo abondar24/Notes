@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:notes/views/constants/routes.dart';
+import 'package:notes/constants/routes.dart';
 import 'package:notes/views/notes_view.dart';
 import 'views/login_view.dart';
 import 'views/register_view.dart';

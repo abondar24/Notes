@@ -10,3 +10,14 @@ Another notes application. This time using flutter
 ```
 flutterfire configure
 ```
+
+- To build
+```
+flutter build <platoform>
+```
+
+- To run from cmd
+
+```
+flutter run lib/main.dart
+```
