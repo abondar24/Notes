@@ -21,3 +21,8 @@ flutter build <platoform>
 ```
 flutter run lib/main.dart
 ```
+
+- To run tests from cmd
+```
+flutter test <path-to-test-file>
+```
