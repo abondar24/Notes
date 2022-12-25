@@ -13,8 +13,17 @@ class NotesService {
 
   List<DatabaseNote> _notes = [];
 
+  //private constructor
+  NotesService._sharedInstance();
+
+  static final NotesService _shared = NotesService._sharedInstance();
+
+  factory NotesService() => _shared;
+
   final _notesStreamController =
       StreamController<List<DatabaseNote>>.broadcast();
+
+  Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream;
 
   Future<void> open() async {
     if (_db != null) {
@@ -48,6 +57,7 @@ class NotesService {
   }
 
   Future<DatabaseUser> createUser({required String email}) async {
+    await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final res = await db.query(
       userTable,
@@ -71,6 +81,7 @@ class NotesService {
   }
 
   Future<DatabaseUser> getUserByEmail({required String email}) async {
+    await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final res = await db.query(
       userTable,
@@ -87,6 +98,7 @@ class NotesService {
   }
 
   Future<DatabaseUser> getUserById({required int id}) async {
+    await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final res = await db.query(
       userTable,
@@ -116,6 +128,7 @@ class NotesService {
   }
 
   Future<void> deleteUser({required String email}) async {
+    await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
 
     final deletedCount = await db.delete(
@@ -130,6 +143,7 @@ class NotesService {
   }
 
   Future<DatabaseNote> createNote({required DatabaseUser user}) async {
+    await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final res = await getUserById(id: user.id);
     if (res != user) {
@@ -150,6 +164,7 @@ class NotesService {
   }
 
   Future<DatabaseNote> getNoteById({required int id}) async {
+    await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final res = await db.query(
       userTable,
@@ -174,22 +189,22 @@ class NotesService {
     required int offset,
     required int limit,
   }) async {
+    await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final res = await db.query(
-      userTable,
+      noteTable,
       offset: offset,
       limit: limit,
     );
 
-    final notes = res.map((r) => DatabaseNote.fromRow(r));
-
-    return notes;
+    return res.map((r) => DatabaseNote.fromRow(r));
   }
 
   Future<DatabaseNote> updateNote({
     required int id,
     required String text,
   }) async {
+    await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
 
     await getNoteById(id: id);
@@ -211,6 +226,7 @@ class NotesService {
   }
 
   Future<void> deleteNote({required int id}) async {
+    await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
 
     final deletedCount = await db.delete(
@@ -228,6 +244,7 @@ class NotesService {
   }
 
   Future<int> deleteAllNotes() async {
+    await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final deletedRows = await db.delete(noteTable);
     _notes.clear();
@@ -237,13 +254,9 @@ class NotesService {
   }
 
   Future<void> _cacheNotes() async {
-    const int notesOffset = 0;
-    const int notesLimit =
-        10000000000; //ultra-big limit to get all notes for sure
-
     final allNotes = await getNotes(
-      offset: notesOffset,
-      limit: notesLimit,
+      offset: allNotesOffset,
+      limit: allNotesLimit,
     );
 
     _notes = allNotes.toList();
@@ -257,6 +270,14 @@ class NotesService {
       throw DatabaseIsNotOpenException();
     } else {
       return db;
+    }
+  }
+
+  Future<void> _ensureDbIsOpen() async {
+    try {
+      await open();
+    } catch (ex) {
+      log(ex.toString());
     }
   }
 }

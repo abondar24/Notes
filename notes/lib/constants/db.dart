@@ -20,6 +20,10 @@ const createNoteTable = '''
             "user_id" INTEGER NOT NULL,
             "text" TEXT ,
             PRIMARY KEY("id" AUTOINCREMENT)
-            FOREIGN KEY ("user_id") REFENCES "user"("id")
+            FOREIGN KEY ("user_id") REFERENCES "user"("id")
            );
       ''';
+
+const int allNotesOffset = 0;
+const int allNotesLimit =
+    10000000000; //ultra-big limit to get all notes for sure
