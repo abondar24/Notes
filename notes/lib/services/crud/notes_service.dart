@@ -276,7 +276,7 @@ class NotesService {
   Future<void> _ensureDbIsOpen() async {
     try {
       await open();
-    } catch (ex) {
+    } on DatabaseAlreadyOpenException catch (ex) {
       log(ex.toString());
     }
   }
