@@ -167,7 +167,7 @@ class NotesService {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final res = await db.query(
-      userTable,
+      noteTable,
       limit: 1,
       where: 'id =?',
       whereArgs: [id],

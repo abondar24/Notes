@@ -31,7 +31,10 @@ class _NewNoteViewState extends State<NewNoteView> {
     }
 
     final text = _textController.text;
-    await _notesService.updateNote(id: note.id, text: text);
+    await _notesService.updateNote(
+      id: note.id,
+      text: text,
+    );
   }
 
   void _setupTextControllerListener() {
