@@ -19,7 +19,7 @@ class NotesService {
   NotesService._sharedInstance() {
     _notesStreamController = StreamController<List<DatabaseNote>>.broadcast(
       onListen: () {
-        _notesStreamController.add(_notes);
+        _notesStreamController.sink.add(_notes);
       },
     );
   }
@@ -39,7 +39,9 @@ class NotesService {
       final docsPath = await getApplicationDocumentsDirectory();
       final dbPath = join(docsPath.path, dbName);
 
-      final db = await openDatabase(dbPath);
+      final db = await openDatabase(
+        dbPath,
+      );
       _db = db;
 
       await db.execute(createUserTable);
@@ -160,7 +162,11 @@ class NotesService {
       textCol: '',
     });
 
-    final note = DatabaseNote(id: noteId, userId: user.id, text: '');
+    final note = DatabaseNote(
+      id: noteId,
+      userId: user.id,
+      text: '',
+    );
 
     _notes.add(note);
     _notesStreamController.add(_notes);
@@ -281,8 +287,8 @@ class NotesService {
   Future<void> _ensureDbIsOpen() async {
     try {
       await open();
-    } on DatabaseAlreadyOpenException catch (ex) {
-      log(ex.toString());
+    } on DatabaseAlreadyOpenException {
+      // log(ex.runtimeType.toString());
     }
   }
 }
