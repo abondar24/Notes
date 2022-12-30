@@ -220,7 +220,9 @@ class NotesService {
 
     await getNoteById(id: id);
 
-    final updCount = await db.update(noteTable, {
+    final updCount = await db.update(noteTable, where: 'id =?', whereArgs: [
+      id
+    ], {
       textCol: text,
     });
 
