@@ -15,3 +15,5 @@ class CouldNotDeleteNoteException implements Exception {}
 class NoteNotExistsException implements Exception {}
 
 class NoteNotUpdatedException implements Exception {}
+
+class UserNotSetException implements Exception {}

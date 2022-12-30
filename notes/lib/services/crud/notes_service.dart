@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:notes/constants/db.dart';
+import 'package:notes/extensions/list/filter.dart';
 import 'package:notes/services/crud/database_exceptions.dart';
 import 'package:notes/services/crud/model/database_note.dart';
 import 'package:sqflite/sqflite.dart';
@@ -10,6 +11,8 @@ import 'package:notes/services/crud/model/database_user.dart';
 
 class NotesService {
   Database? _db;
+
+  DatabaseUser? _user;
 
   List<DatabaseNote> _notes = [];
 
@@ -28,7 +31,15 @@ class NotesService {
 
   late final StreamController<List<DatabaseNote>> _notesStreamController;
 
-  Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream;
+  Stream<List<DatabaseNote>> get allNotes =>
+      _notesStreamController.stream.filter((note) {
+        final currUser = _user;
+        if (currUser != null) {
+          return note.userId == currUser.id;
+        } else {
+          throw UserNotSetException();
+        }
+      });
 
   Future<void> open() async {
     if (_db != null) {
@@ -121,12 +132,21 @@ class NotesService {
     }
   }
 
-  Future<DatabaseUser> getOrCreateUser({required String email}) async {
+  Future<DatabaseUser> getOrCreateUser({
+    required String email,
+    bool setAsCurrent = true,
+  }) async {
     try {
       final user = await getUserByEmail(email: email);
+      if (setAsCurrent) {
+        _user = user;
+      }
       return user;
     } on UserNotExistsException {
       final createdUser = await createUser(email: email);
+      if (setAsCurrent) {
+        _user = createdUser;
+      }
       return createdUser;
     } catch (ex) {
       log(ex.toString());
