@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notes/utils/generic_dialog.dart';
+import 'package:notes/utils/generics/generic_dialog.dart';
 
 Future<void> showErrorDialog(
   BuildContext context,
