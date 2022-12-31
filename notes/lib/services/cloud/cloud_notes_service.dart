@@ -14,11 +14,19 @@ class CloudNotesService {
 
   factory CloudNotesService() => _shared;
 
-  void createNewNote({required String userId}) async {
-    await notes.add({
+  Future<CloudNote> createNewNote({required String userId}) async {
+    final document = await notes.add({
       userIdField: userId,
       textField: '',
     });
+
+    final note = await document.get();
+
+    return CloudNote(
+      docId: note.id,
+      userId: userId,
+      text: '',
+    );
   }
 
   Stream<Iterable<CloudNote>> allNotes({
@@ -40,13 +48,7 @@ class CloudNotesService {
           .get()
           .then(
             (value) => value.docs.map(
-              (doc) {
-                return CloudNote(
-                  docId: doc.id,
-                  userId: doc.data()[userIdField],
-                  text: doc.data()[textField],
-                );
-              },
+              (doc) => CloudNote.fromSnapshot(doc),
             ),
           );
     } catch (ex) {
