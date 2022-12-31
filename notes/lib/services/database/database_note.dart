@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notes/constants/db.dart';
+import 'package:notes/services/database/database_constants.dart';
 
 @immutable
 class DatabaseNote {

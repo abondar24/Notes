@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notes/constants/routes.dart';
+import 'package:notes/routes/routes.dart';
 import 'package:notes/views/notes/notes_view.dart';
 import 'package:notes/views/notes/create_update_note_view.dart';
 import 'views/login_view.dart';

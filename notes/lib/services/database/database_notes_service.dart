@@ -1,25 +1,26 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:notes/constants/db.dart';
-import 'package:notes/extensions/list/filter.dart';
-import 'package:notes/services/crud/database_exceptions.dart';
-import 'package:notes/services/crud/model/database_note.dart';
+import 'package:notes/services/database/database_constants.dart';
+import 'package:notes/utils/extensions/list/filter.dart';
+import 'package:notes/services/database/database_exceptions.dart';
+import 'package:notes/services/database/database_note.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' show join;
-import 'package:notes/services/crud/model/database_user.dart';
+import 'package:notes/services/database/database_user.dart';
 
-class NotesService {
+class DatabaseNotesService {
   Database? _db;
 
   DatabaseUser? _user;
 
   List<DatabaseNote> _notes = [];
 
-  static final NotesService _shared = NotesService._sharedInstance();
+  static final DatabaseNotesService _shared =
+      DatabaseNotesService._sharedInstance();
 
   //private constructor
-  NotesService._sharedInstance() {
+  DatabaseNotesService._sharedInstance() {
     _notesStreamController = StreamController<List<DatabaseNote>>.broadcast(
       onListen: () {
         _notesStreamController.sink.add(_notes);
@@ -27,7 +28,7 @@ class NotesService {
     );
   }
 
-  factory NotesService() => _shared;
+  factory DatabaseNotesService() => _shared;
 
   late final StreamController<List<DatabaseNote>> _notesStreamController;
 
