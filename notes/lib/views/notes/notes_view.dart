@@ -2,10 +2,13 @@ import 'package:notes/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:notes/menu/menu_action.dart';
 import 'package:notes/routes/routes.dart';
+import 'package:notes/services/auth/bloc/auth_bloc.dart';
+import 'package:notes/services/auth/bloc/auth_event.dart';
 import 'package:notes/services/cloud/cloud_note.dart';
 import 'package:notes/services/cloud/cloud_notes_service.dart';
 import 'package:notes/utils/dialogs/logout_dialog.dart';
 import 'package:notes/views/notes/notes_list_view.dart';
+import 'package:flutter_bloc/flutter_bloc.dart' show ReadContext;
 
 //TODO Create a separate view with local notes and add functionality to transfer notes from local to remote.
 class NotesView extends StatefulWidget {
@@ -49,11 +52,7 @@ class _NotesViewState extends State<NotesView> {
                 case MenuAction.logout:
                   final shouldLogout = await showLogoutDialog(context);
                   if (shouldLogout) {
-                    await AuthService.firebase().logOut();
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      loginRoute,
-                      (route) => false,
-                    );
+                    context.read<AuthBloc>().add(const AuthEventLogout());
                   }
                   break;
               }
