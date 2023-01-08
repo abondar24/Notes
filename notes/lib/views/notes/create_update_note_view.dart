@@ -19,7 +19,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
 
   CloudNote? _cloudNote;
 
-  late final DatabaseNotesService _databaseNotesService;
+  //late final DatabaseNotesService _databaseNotesService;
 
   late final CloudNotesService _cloudNotesService;
 
