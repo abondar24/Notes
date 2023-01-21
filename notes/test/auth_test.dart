@@ -70,6 +70,13 @@ void main() {
       final user = provider.currentUser;
       expect(user, isNotNull);
     });
+
+    test('Send reset email', () async {
+      provider.sendPasswordReset(email: 'test');
+      final user = provider.currentUser;
+      expect(user, isNotNull);
+      expect(user!.email, 'test');
+    });
   });
 }
 
@@ -135,6 +142,16 @@ class MockAuthProvider implements AuthProvider {
     if (user == null) throw UserNotFoundAuthExcpetion();
 
     const newUser = AuthUser(id: "1", isEmailVerified: true, email: 'test');
+    _user = newUser;
+  }
+
+  @override
+  Future<void> sendPasswordReset({required String email}) async {
+    isUserInitialized();
+    final user = _user;
+    if (user == null) throw UserNotFoundAuthExcpetion();
+
+    final newUser = AuthUser(id: user.id, isEmailVerified: false, email: email);
     _user = newUser;
   }
 

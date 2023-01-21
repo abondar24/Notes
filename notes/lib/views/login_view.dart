@@ -6,7 +6,6 @@ import 'package:notes/services/auth/bloc/auth_state.dart';
 import 'dart:developer';
 import 'package:notes/utils/dialogs/error_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notes/utils/dialogs/loading_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -56,9 +55,14 @@ class _LoginViewState extends State<LoginView> {
         }
       },
       child: Scaffold(
-          appBar: AppBar(title: const Text('Login')),
-          body: Column(
+        appBar: AppBar(title: const Text('Login')),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
             children: [
+              const Text(
+                'Please login to get your notes and create new ones',
+              ),
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -93,12 +97,21 @@ class _LoginViewState extends State<LoginView> {
               TextButton(
                   onPressed: () {
                     context.read<AuthBloc>().add(
+                          const AuthEventForgotPassword(),
+                        );
+                  },
+                  child: const Text("Forgot Password")),
+              TextButton(
+                  onPressed: () {
+                    context.read<AuthBloc>().add(
                           const AuthEventShouldRegister(),
                         );
                   },
                   child: const Text("Don't have an account? Register here"))
             ],
-          )),
+          ),
+        ),
+      ),
     );
   }
 }
