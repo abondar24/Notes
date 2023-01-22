@@ -11,6 +11,11 @@ Another notes application. This time using flutter
 flutterfire configure
 ```
 
+- To generate icons
+```
+flutter pub run flutter_launcher_icons:main
+```
+
 - To build
 ```
 flutter build <platoform>
