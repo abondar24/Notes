@@ -5,6 +5,7 @@ import 'package:notes/services/cloud/cloud_notes_service.dart';
 import 'package:notes/services/database/database_notes_service.dart';
 import 'package:notes/utils/dialogs/cannot_share_empty_note_dialog.dart';
 import 'package:notes/utils/extensions/context/get_arguments.dart';
+import 'package:notes/utils/extensions/context/loc.dart';
 import 'package:share_plus/share_plus.dart';
 
 class CreateUpdateNoteView extends StatefulWidget {
@@ -161,7 +162,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New Note'),
+        title: Text(context.loc.new_note),
         actions: [
           IconButton(
             onPressed: () async {
@@ -186,8 +187,8 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
                 controller: _textController,
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
-                decoration: const InputDecoration(
-                  hintText: 'Start typing your note...',
+                decoration: InputDecoration(
+                  hintText: context.loc.new_note_hint,
                 ),
               );
             default:

@@ -6,18 +6,21 @@ import 'package:notes/services/auth/bloc/auth_bloc.dart';
 import 'package:notes/services/auth/bloc/auth_event.dart';
 import 'package:notes/services/auth/bloc/auth_state.dart';
 import 'package:notes/services/auth/firebase_auth_provider.dart';
-import 'package:notes/views/fotgot_password_view.dart';
+import 'package:notes/views/forgot_password_view.dart';
 import 'package:notes/views/notes/notes_view.dart';
 import 'package:notes/views/notes/create_update_note_view.dart';
 import 'views/login_view.dart';
 import 'views/register_view.dart';
 import 'views/verify_email_view.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(MaterialApp(
-    title: 'Flutter Demo',
+    supportedLocales: AppLocalizations.supportedLocales,
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    title: 'Notes',
     theme: ThemeData(
       primarySwatch: Colors.blue,
     ),

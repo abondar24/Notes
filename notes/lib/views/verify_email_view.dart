@@ -1,9 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notes/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:notes/routes/routes.dart';
 import 'package:notes/services/auth/bloc/auth_bloc.dart';
 import 'package:notes/services/auth/bloc/auth_event.dart';
+import 'package:notes/utils/extensions/context/loc.dart';
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({super.key});
@@ -17,21 +16,27 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Verify email'),
+        title: Text(
+          context.loc.verify_email,
+        ),
       ),
       body: Column(
         children: [
-          const Text(
-              "We've sent you an email verification. Please check your inbox"),
-          const Text(
-              "If you havenn't recieved it, please click the button below"),
+          Text(
+            context.loc.verification_sent,
+          ),
+          Text(
+            context.loc.verification_not_recieved,
+          ),
           TextButton(
             onPressed: () {
               context.read<AuthBloc>().add(
                     const AuthEventSendEmail(),
                   );
             },
-            child: const Text('Send email verification'),
+            child: Text(
+              context.loc.send_verfication,
+            ),
           ),
           TextButton(
             onPressed: () {
@@ -39,7 +44,9 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                     const AuthEventLogout(),
                   );
             },
-            child: const Text('Restart'),
+            child: Text(
+              context.loc.restart,
+            ),
           )
         ],
       ),

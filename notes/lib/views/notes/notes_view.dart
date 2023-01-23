@@ -7,6 +7,8 @@ import 'package:notes/services/auth/bloc/auth_event.dart';
 import 'package:notes/services/cloud/cloud_note.dart';
 import 'package:notes/services/cloud/cloud_notes_service.dart';
 import 'package:notes/utils/dialogs/logout_dialog.dart';
+import 'package:notes/utils/extensions/context/loc.dart';
+import 'package:notes/utils/extensions/stream/count.dart';
 import 'package:notes/views/notes/notes_list_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show ReadContext;
 
@@ -36,7 +38,18 @@ class _NotesViewState extends State<NotesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notes'),
+        title: StreamBuilder(
+          stream: _cloudNotesService.allNotes(userId: userId).count,
+          builder: (context, AsyncSnapshot<int> snapshot) {
+            if (snapshot.hasData) {
+              final noteCount = snapshot.data ?? 0;
+              final text = context.loc.notes_title(noteCount);
+              return Text(text);
+            } else {
+              return const Text('');
+            }
+          },
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -59,9 +72,11 @@ class _NotesViewState extends State<NotesView> {
             },
             itemBuilder: (context) {
               return [
-                const PopupMenuItem<MenuAction>(
+                PopupMenuItem<MenuAction>(
                   value: MenuAction.logout,
-                  child: Text('Log out'),
+                  child: Text(
+                    context.loc.logout,
+                  ),
                 )
               ];
             },

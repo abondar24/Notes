@@ -1,0 +1,52 @@
+{
+    "note":"Note",
+    "login":"Login",
+    "logout": "Log out",
+    "cancel": "Cancel",
+    "yes": "Yes",
+    "delete": "Delete",
+    "sharing": "Sharing",
+    "ok": "OK",
+    "verify_email": "Verify email",
+    "register": "Register",
+    "restart": "Restart",
+    "wait": "Please wait",
+    "forgot_password": "Forgot Password",
+    "wrong_credentials":  "Wrong credentials!",
+    "aunthentication_error": "Authentication Error!",
+    "login_prompt": "Please login to get your notes and create new ones",
+    "enter_email": "Enter email address ",
+    "enter_password": "Enter password",
+    "login_register_button": "Don't have an account? Register here",
+    "password_reset_failed": "Password reset failed",
+    "email_hint":  "Your email address...",
+    "send_pw_reset":"Send password reset link",
+    "back_login_button":"Back to login page",
+    "verification_sent":"We've sent you an email verification. Please check your inbox",
+    "verification_not_recieved":"If you havenn't recieved it, please click the button below",
+    "send_verfication":"Send email verification",
+    "weak_password":"Weak Password!",
+    "email_in_use":"Email already in use!",
+    "invalid_email":"Invalid email!",
+    "registration_failed":"Registration failed!",
+    "enter_email_password":"Enter email and password",
+    "login_button":"Have an account? Please login",
+    "new_note":"New Note",
+    "new_note_hint":"Start typing your note...",
+    "empty_note_dialog":"Your note is empty",
+    "delete_dialog":"Are you sure you want to delete this note?",
+    "error_dialog":"An error occured",
+    "logout_dialog":"Are you sure you want to log out?",
+    "password_reset_dialog":"Password reset email is sent",
+    "password_reset_dialog_title":"Password reset",
+
+    "notes_title": "{count, plural, =0{No notes yet} =1{1 note} other{{count} notes}}",
+    "@notes_title": {
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "3 notes"
+            }
+        }
+    }
+}
