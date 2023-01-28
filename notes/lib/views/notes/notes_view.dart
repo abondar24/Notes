@@ -12,7 +12,6 @@ import 'package:notes/utils/extensions/stream/count.dart';
 import 'package:notes/views/notes/notes_list_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show ReadContext;
 
-//TODO Create a separate view with local notes and add functionality to transfer notes from local to remote.
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
 
@@ -21,15 +20,12 @@ class NotesView extends StatefulWidget {
 }
 
 class _NotesViewState extends State<NotesView> {
-  // late final DatabaseNotesService _databaseNotesService;
   late final CloudNotesService _cloudNotesService;
 
-  //String get userEmail => AuthService.firebase().currentUser!.email;
   String get userId => AuthService.firebase().currentUser!.id;
 
   @override
   void initState() {
-    // _databaseNotesService = DatabaseNotesService();
     _cloudNotesService = CloudNotesService();
     super.initState();
   }
@@ -57,8 +53,19 @@ class _NotesViewState extends State<NotesView> {
                 createUpdateNotesRoute,
               );
             },
-            icon: const Icon(Icons.add),
+            icon: const Icon(
+              Icons.add,
+            ),
           ),
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  showOfflineNotesRoute,
+                );
+              },
+              icon: const Icon(
+                Icons.download_for_offline,
+              )),
           PopupMenuButton<MenuAction>(
             onSelected: (value) async {
               switch (value) {
@@ -112,44 +119,5 @@ class _NotesViewState extends State<NotesView> {
         },
       ),
     );
-    // body: FutureBuilder(
-    //   future: _databaseNotesService.getOrCreateUser(email: userEmail),
-    //   builder: (context, snapshot) {
-    //     switch (snapshot.connectionState) {
-    //       case ConnectionState.done:
-    //         return StreamBuilder(
-    //           stream: _databaseNotesService.allNotes,
-    //           builder: (context, snapshot) {
-    //             switch (snapshot.connectionState) {
-    //               case ConnectionState.waiting:
-    //               case ConnectionState.active:
-    //                 if (snapshot.hasData) {
-    //                   final allNotes = snapshot.data as List<DatabaseNote>;
-    //                   return NotesListView(
-    //                     notes: allNotes,
-    //                     onTap: (note) {
-    //                       Navigator.of(context).pushNamed(
-    //                         createUpdateNotesRoute,
-    //                         arguments: note,
-    //                       );
-    //                     },
-    //                     onDelete: (note) async {
-    //                       await _databaseNotesService.deleteNote(id: note.id);
-    //                     },
-    //                   );
-    //                 } else {
-    //                   return const CircularProgressIndicator();
-    //                 }
-    //               default:
-    //                 return const CircularProgressIndicator();
-    //             }
-    //           },
-    //         );
-    //       default:
-    //         return const CircularProgressIndicator();
-    //     }
-    //   },
-    // ),
-    // );
   }
 }
