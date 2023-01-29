@@ -28,7 +28,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
 
   late final TextEditingController _textController;
 
-  late final bool isOffine;
+  bool saveOffine = false;
 
   @override
   void initState() {
@@ -73,19 +73,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     _textController.addListener(_textControllerListener);
   }
 
-  Future<DatabaseNote> createOrGetOfflineNote() async {
-    final widgetNote = context.getArgument<DatabaseNote>();
-    if (widgetNote != null) {
-      _databaseNote = widgetNote;
-      _textController.text = widgetNote.text;
-      return widgetNote;
-    }
-
-    final existingNote = _databaseNote;
-    if (existingNote != null) {
-      return existingNote;
-    }
-
+  void createOrGetOfflineNote() async {
     final currentUser = AuthService.firebase().currentUser!;
     final email = currentUser.email;
 
@@ -97,8 +85,6 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
       user: owner,
     );
     _databaseNote = newNote;
-
-    return newNote;
   }
 
   Future<CloudNote> createOrGetNote() async {
@@ -107,8 +93,6 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
       _cloudNote = widgetNote;
       _textController.text = widgetNote.text;
       return widgetNote;
-    } else {
-      final widgetNote = context.getArgument<DatabaseNote>();
     }
 
     final existingNote = _cloudNote;
@@ -121,40 +105,57 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     final newNote = await _cloudNotesService.createNewNote(
       userId: currentUser.id,
     );
+
+    createOrGetOfflineNote();
+
     _cloudNote = newNote;
     return newNote;
   }
 
-  // void _deleteNoteIfEmpty() {
-  //   final note = _databaseNote;
-  //   if (_textController.text.isEmpty && note != null) {
-  //     _databaseNotesService.deleteNote(id: note.id);
-  //   }
-  // }
-
   void _deleteNoteIfEmpty() {
+    if (_textController.text.isEmpty) {
+      _deleteCloudIfEmpty();
+      _deleteDbIfEmpty();
+    }
+  }
+
+  void _deleteCloudIfEmpty() {
     final note = _cloudNote;
-    if (_textController.text.isEmpty && note != null) {
+    if (note != null) {
       _cloudNotesService.deleteNote(docId: note.docId);
     }
   }
 
-  // void _saveNoteIfNotEmpty() async {
-  //   final note = _databaseNote;
-  //   final text = _textController.text;
-  //   if (text.isNotEmpty && note != null) {
-  //     await _databaseNotesService.updateNote(id: note.id, text: text);
-  //   }
-  // }
+  void _deleteDbIfEmpty() {
+    final note = _databaseNote;
+    if (note != null) {
+      _databaseNotesService.deleteNote(id: note.id);
+    }
+  }
 
-  void _saveNoteIfNotEmpty() async {
-    final note = _cloudNote;
+  void _saveNoteIfNotEmpty() {
     final text = _textController.text;
-    if (text.isNotEmpty && note != null) {
+    if (text.isNotEmpty) {
+      _saveCloudIfNotEmpty(text);
+      _saveDbIfNotEmpty(text);
+    }
+  }
+
+  void _saveCloudIfNotEmpty(String text) async {
+    final note = _cloudNote;
+    if (note != null) {
       await _cloudNotesService.updateNote(
         docId: note.docId,
         text: text,
       );
+    }
+  }
+
+  void _saveDbIfNotEmpty(String text) async {
+    final note = _databaseNote;
+    print(note);
+    if (note != null) {
+      await _databaseNotesService.updateNote(id: note.id, text: text);
     }
   }
 
@@ -191,14 +192,19 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
               _setupTextControllerListener();
-              return TextField(
-                controller: _textController,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                decoration: InputDecoration(
-                  hintText: context.loc.new_note_hint,
-                ),
+              return Column(
+                children: [
+                  TextField(
+                    controller: _textController,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    decoration: InputDecoration(
+                      hintText: context.loc.new_note_hint,
+                    ),
+                  ),
+                ],
               );
+
             default:
               return const CircularProgressIndicator();
           }

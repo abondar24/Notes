@@ -3,6 +3,7 @@ import 'package:notes/utils/extensions/context/loc.dart';
 import 'package:notes/utils/extensions/stream/count.dart';
 import 'package:notes/views/notes/offline/notes_offline_list_view.dart';
 
+import '../../../routes/routes.dart';
 import '../../../services/auth/auth_service.dart';
 import '../../../services/database/database_note.dart';
 import '../../../services/database/database_notes_service.dart';
@@ -29,18 +30,7 @@ class _NotesOfflineViewState extends State<NotesOfflineView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: StreamBuilder(
-          stream: _databaseNotesService.allNotes.count,
-          builder: (context, AsyncSnapshot<int> snapshot) {
-            if (snapshot.hasData) {
-              final noteCount = snapshot.data ?? 0;
-              final text = context.loc.notes_title(noteCount);
-              return Text(text);
-            } else {
-              return const Text('');
-            }
-          },
-        ),
+        title: const Text('Offline notes'),
       ),
       body: FutureBuilder(
         future: _databaseNotesService.getOrCreateUser(email: userEmail),
@@ -58,10 +48,10 @@ class _NotesOfflineViewState extends State<NotesOfflineView> {
                         return NotesOfflineListView(
                           notes: allNotes,
                           onTap: (note) {
-                            // Navigator.of(context).pushNamed(
-                            //   createUpdateNotesRoute,
-                            //   arguments: note,
-                            // );
+                            Navigator.of(context).pushNamed(
+                              createUpdateNotesRoute,
+                              arguments: note,
+                            );
                           },
                           onDelete: (note) async {
                             await _databaseNotesService.deleteNote(id: note.id);
