@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:notes/utils/extensions/context/loc.dart';
-import 'package:notes/utils/extensions/stream/count.dart';
 import 'package:notes/views/notes/offline/notes_offline_list_view.dart';
 
 import '../../../routes/routes.dart';
@@ -30,7 +29,18 @@ class _NotesOfflineViewState extends State<NotesOfflineView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Offline notes'),
+        title: FutureBuilder<Iterable<DatabaseNote>>(
+          future: _databaseNotesService.getNotes(offset: 0, limit: 100000),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final noteCount = snapshot.data!.length;
+              final text = context.loc.notes_title(noteCount);
+              return Text(text);
+            } else {
+              return const Text('');
+            }
+          },
+        ),
       ),
       body: FutureBuilder(
         future: _databaseNotesService.getOrCreateUser(email: userEmail),
