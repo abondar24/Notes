@@ -61,7 +61,6 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     if (note == null) {
       return;
     }
-
     await _databaseNotesService.updateNote(
       id: note.id,
       text: text,
@@ -73,9 +72,13 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     _textController.addListener(_textControllerListener);
   }
 
-  void createOrGetOfflineNote() async {
-    final currentUser = AuthService.firebase().currentUser!;
-    final email = currentUser.email;
+  createOrGetOfflineNote({required String email}) async {
+    final widgetNote = context.getArgument<DatabaseNote>();
+    if (widgetNote != null) {
+      _databaseNote = widgetNote;
+      _textController.text = widgetNote.text;
+      return widgetNote;
+    }
 
     final owner = await _databaseNotesService.getUserByEmail(
       email: email,
@@ -105,10 +108,11 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     final newNote = await _cloudNotesService.createNewNote(
       userId: currentUser.id,
     );
-
-    createOrGetOfflineNote();
-
     _cloudNote = newNote;
+
+    createOrGetOfflineNote(
+      email: currentUser.email,
+    );
     return newNote;
   }
 
@@ -153,7 +157,6 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
 
   void _saveDbIfNotEmpty(String text) async {
     final note = _databaseNote;
-    print(note);
     if (note != null) {
       await _databaseNotesService.updateNote(id: note.id, text: text);
     }
