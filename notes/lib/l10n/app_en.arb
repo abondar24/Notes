@@ -32,6 +32,7 @@
     "enter_email_password":"Enter email and password",
     "login_button":"Have an account? Please login",
     "new_note":"New Note",
+    "new_offline_note":"New  Offline Note",
     "new_note_hint":"Start typing your note...",
     "empty_note_dialog":"Your note is empty",
     "delete_dialog":"Are you sure you want to delete this note?",

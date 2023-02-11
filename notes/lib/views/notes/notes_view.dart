@@ -60,6 +60,15 @@ class _NotesViewState extends State<NotesView> {
           IconButton(
               onPressed: () {
                 Navigator.of(context).pushNamed(
+                  createUpdateNotesOfflineRoute,
+                );
+              },
+              icon: const Icon(
+                Icons.add_box_outlined,
+              )),
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(
                   showOfflineNotesRoute,
                 );
               },

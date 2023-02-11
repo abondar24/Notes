@@ -59,7 +59,7 @@ class _NotesOfflineViewState extends State<NotesOfflineView> {
                           notes: allNotes,
                           onTap: (note) {
                             Navigator.of(context).pushNamed(
-                              createUpdateNotesRoute,
+                              createUpdateNotesOfflineRoute,
                               arguments: note,
                             );
                           },
