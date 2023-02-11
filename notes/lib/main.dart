@@ -19,12 +19,25 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
+  MaterialColor mycolor = const MaterialColor(0x24283B, <int, Color>{
+    50: Color(0x24283B),
+    100: Color(0x24283B),
+    200: Color(0x24283B),
+    300: Color(0x24283B),
+    400: Color(0x24283B),
+    500: Color(0x24283B),
+    600: Color(0x24283B),
+    700: Color(0x24283B),
+    800: Color(0x24283B),
+    900: Color(0x24283B),
+  });
+
   runApp(MaterialApp(
     supportedLocales: AppLocalizations.supportedLocales,
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     title: 'Notes',
     theme: ThemeData(
-      primarySwatch: Colors.blue,
+      primarySwatch: mycolor, //replace with
     ),
     home: BlocProvider<AuthBloc>(
       create: (context) => AuthBloc(FirebaseAuthProvider()),
