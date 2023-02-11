@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:notes/services/cloud/cloud_notes_service.dart';
+import 'package:notes/services/database/database_exceptions.dart';
+import 'package:notes/utils/dialogs/error_dialog.dart';
+import 'package:notes/utils/dialogs/sync_dialog.dart';
 import 'package:notes/utils/extensions/context/loc.dart';
 import 'package:notes/views/notes/offline/notes_offline_list_view.dart';
 
@@ -16,12 +20,14 @@ class NotesOfflineView extends StatefulWidget {
 
 class _NotesOfflineViewState extends State<NotesOfflineView> {
   late final DatabaseNotesService _databaseNotesService;
+  late final CloudNotesService _cloudNotesService;
 
   String get userEmail => AuthService.firebase().currentUser!.email;
 
   @override
   void initState() {
     _databaseNotesService = DatabaseNotesService();
+    _cloudNotesService = CloudNotesService();
     super.initState();
   }
 
@@ -41,6 +47,33 @@ class _NotesOfflineViewState extends State<NotesOfflineView> {
             }
           },
         ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              try {
+                final user = await _databaseNotesService.getUserByEmail(
+                    email: userEmail);
+                final unsyncedNotes = await _databaseNotesService
+                    .getNotSyncedNotes(userId: user.id);
+                if (unsyncedNotes.isEmpty) {
+                  showSyncDialog(context, context.loc.sync_nothing);
+                } else {
+                  _cloudNotesService.syncNotesToCloud(
+                    dbNotes: unsyncedNotes,
+                    userId: AuthService.firebase().currentUser!.id,
+                  );
+                  await _databaseNotesService.markNotesSync(userId: user.id);
+                  showSyncDialog(context, context.loc.sync_all);
+                }
+              } on Exception {
+                showErrorDialog(context, context.loc.sync_error);
+              }
+            },
+            icon: const Icon(
+              Icons.cloud,
+            ),
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: _databaseNotesService.getOrCreateUser(email: userEmail),

@@ -40,6 +40,11 @@
     "logout_dialog":"Вы уверены,что хотите выйти?",
     "password_reset_dialog":"Письмо для сброса пароля отправлено",
     "password_reset_dialog_title":"Сброс пароля",
+    "sync_nothing":"Нет записей для синхронизации",
+    "sync_all": "Все записи сохранены в облаке",
+    "sync_error":"Ошибка синхронизации",
+    "sync_dialog":"Синхронизация с облаком",
+
 
 
     "notes_title": "{count, plural, =0{Нет пока записей} =1{1 запись} other{{count} notes}}",

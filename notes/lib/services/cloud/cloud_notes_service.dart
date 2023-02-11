@@ -5,6 +5,8 @@ import 'package:notes/services/cloud/cloud_constants.dart';
 import 'package:notes/services/cloud/cloud_exceptions.dart';
 import 'package:notes/services/cloud/cloud_note.dart';
 
+import '../database/database_note.dart';
+
 class CloudNotesService {
   final notes = FirebaseFirestore.instance.collection('notes');
 
@@ -27,6 +29,22 @@ class CloudNotesService {
       userId: userId,
       text: '',
     );
+  }
+
+  Future<void> syncNotesToCloud({
+    required Iterable<DatabaseNote> dbNotes,
+    required String userId,
+  }) async {
+    var batch = FirebaseFirestore.instance.batch();
+    dbNotes.forEach((note) {
+      var docRef = notes.doc();
+      batch.set(docRef, {
+        userIdField: userId,
+        textField: note.text,
+      });
+    });
+
+    batch.commit();
   }
 
   Stream<Iterable<CloudNote>> allNotes({

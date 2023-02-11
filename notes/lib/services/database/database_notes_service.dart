@@ -187,6 +187,7 @@ class DatabaseNotesService {
       id: noteId,
       userId: user.id,
       text: '',
+      isSync: false,
     );
 
     _notes.add(note);
@@ -232,6 +233,20 @@ class DatabaseNotesService {
     return res.map((r) => DatabaseNote.fromRow(r));
   }
 
+  Future<Iterable<DatabaseNote>> getNotSyncedNotes({
+    required int userId,
+  }) async {
+    await _ensureDbIsOpen();
+    final db = _getDatabaseOrThrow();
+    final res = await db.query(
+      noteTable,
+      where: 'user_id =? and is_sync=0',
+      whereArgs: [userId],
+    );
+
+    return res.map((r) => DatabaseNote.fromRow(r));
+  }
+
   Future<DatabaseNote> updateNote({
     required int id,
     required String text,
@@ -257,6 +272,18 @@ class DatabaseNotesService {
 
       return updNote;
     }
+  }
+
+  Future<void> markNotesSync({
+    required int userId,
+  }) async {
+    await _ensureDbIsOpen();
+    final db = _getDatabaseOrThrow();
+    await db.update(
+        noteTable,
+        where: 'user_id =? and is_sync=0',
+        whereArgs: [userId],
+        {isSyncCol: true});
   }
 
   Future<void> deleteNote({required int id}) async {

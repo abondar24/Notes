@@ -5,6 +5,7 @@ const idCol = "id";
 const emailCol = "email";
 const userIdCol = "user_id";
 const textCol = "text";
+const isSyncCol = "is_sync";
 
 const createUserTable = ''' 
            CREATE TABLE IF NOT EXISTS "user"(
@@ -19,6 +20,7 @@ const createNoteTable = '''
             "id" INTEGER NOT NULL,
             "user_id" INTEGER NOT NULL,
             "text" TEXT ,
+            "is_sync" INTEGER NOT NULL DEFAULT 0,
             PRIMARY KEY("id" AUTOINCREMENT)
             FOREIGN KEY ("user_id") REFERENCES "user"("id")
            );

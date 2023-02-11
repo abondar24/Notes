@@ -40,6 +40,10 @@
     "logout_dialog":"Are you sure you want to log out?",
     "password_reset_dialog":"Password reset email is sent",
     "password_reset_dialog_title":"Password reset",
+    "sync_nothing":"Nothing to synchronize",
+    "sync_all": "All notes saved in cloud",
+    "sync_error":"Synchronization error occured",
+    "sync_dialog":"Cloud synchronization",
 
     "notes_title": "{count, plural, =0{No notes yet} =1{1 note} other{{count} notes}}",
     "@notes_title": {
